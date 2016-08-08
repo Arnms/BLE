@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Wearlovely</string>
+    <string name="title_activity_main">Wearlovely</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">비콘 설정</string>
+    <string name="title_activity_add_device">AddDeviceActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

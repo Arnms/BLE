@@ -1,0 +1,11 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_camera" type="drawable">@android:drawable/ic_menu_camera</item>
+    <item name="ic_menu_gallery" type="drawable">@android:drawable/ic_menu_gallery</item>
+    <item name="ic_menu_slideshow" type="drawable">@android:drawable/ic_menu_slideshow</item>
+    <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
+    <item name="ic_power_settings" type="drawable">@drawable/ic_power_settings_new_black_24dp</item>
+    <item name="ic_bluetooth_search_24" type="drawable">@drawable/ic_bluetooth_searching_black_24dp</item>
+    <item name="ic_deivces_other" type="drawable">@drawable/ic_devices_other_black_24dp</item>
+    <item name="ic_device" type="drawable">@drawable/ic_phone_android_black_48dp</item>
+    <item name="ic_beacon" type="drawable">@drawable/ic_bluetooth_searching_black_48dp</item>
+</resources>
