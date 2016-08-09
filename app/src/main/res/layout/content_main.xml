@@ -21,21 +21,12 @@
         android:layout_centerHorizontal="true"
         android:onClick="onClick_cm_addDevice" />
 
-    <TextView
-        android:id="@+id/cm_none_text"
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="@color/pink_900"
-        android:text="저장된 기기가 없습니다." />
-
-    <ListView
-        android:id="@+id/cm_device_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cm_add_device_button"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp"
-        android:layout_alignParentBottom="true" />
+        android:id="@+id/cm_view_fragment"
+        android:layout_weight="1"
+        android:name="com.example.arnm.wearlovely.ViewBeacons"
+        android:layout_below="@+id/cm_add_device_button" />
 
 </RelativeLayout>
