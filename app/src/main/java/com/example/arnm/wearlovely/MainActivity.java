@@ -1,9 +1,9 @@
 package com.example.arnm.wearlovely;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,30 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.MonitorNotifier;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-public class MainActivity extends AppCompatActivity implements BeaconConsumer, RangeNotifier, NavigationView.OnNavigationItemSelectedListener {
-    private ListView mListView;
-    private DeviceListAdapter mAdapter;
-    private BeaconManager beaconManager;
-    private List<Beacon> beaconList = new ArrayList<Beacon>();
-
-    private final Region mRegion = new Region("Wearlovely", null, null, null);
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String TAG = "BeaconsEverywhere";
 
     @Override
@@ -57,13 +35,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, R
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_devices);
 
-        mListView = (ListView) findViewById(R.id.cm_device_list);
-        mAdapter = new DeviceListAdapter(this, beaconList);
-        mListView.setAdapter(mAdapter);
-
-        beaconManager = BeaconManager.getInstanceForApplication(this);
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        beaconManager.bind(this);
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.cm_view_fragment, new ViewBeacons());
+        ft.commit();
     }
 
     @Override
@@ -122,88 +97,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, R
         return true;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        beaconManager.unbind(this);
-    }
-
     public void onClick_cm_addDevice(View v) {
         Intent intent = new Intent(getApplicationContext(), AddDeviceActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void onBeaconServiceConnect() {
-        try {
-            beaconManager.startRangingBeaconsInRegion(mRegion);
-        }catch(RemoteException e) {
-            e.printStackTrace();
-        }
-
-        /*try {
-            beaconManager.startMonitoringBeaconsInRegion(region);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }*/
-        beaconManager.setRangeNotifier(this);
-
-        /*beaconManager.setMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                try {
-                    Log.d(TAG, "didEnterRegion");
-                    beaconManager.startRangingBeaconsInRegion(region);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-                try {
-                    Log.d(TAG, "didExitRegion");
-                    beaconManager.stopRangingBeaconsInRegion(region);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
-
-        beaconManager.setRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, Region region) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        beaconList = new ArrayList<>(beacons);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                });
-            }
-        });*/
-    }
-
-    @Override
-    public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, Region region) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                beaconList = new ArrayList<>(beacons);
-                mAdapter.setBeaconList(beaconList);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
     }
 }

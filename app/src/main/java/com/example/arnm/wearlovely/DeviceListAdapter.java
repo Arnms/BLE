@@ -2,6 +2,7 @@ package com.example.arnm.wearlovely;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,9 +24,9 @@ public class DeviceListAdapter extends BaseAdapter {
     private List<Beacon> beaconList;
     private static LayoutInflater inflater = null;
 
-    public DeviceListAdapter(Context mContext, List<Beacon> beaconList) {
+    public DeviceListAdapter(Context mContext) {
         this.mContext = mContext;
-        this.beaconList = beaconList;
+        this.beaconList = new ArrayList<Beacon>();
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -46,17 +49,6 @@ public class DeviceListAdapter extends BaseAdapter {
     public View getView(int index, View convertView, ViewGroup parent) {
         if(convertView == null) {
             convertView = inflater.inflate(R.layout.listview_item, null);
-        }
-
-        TextView mNoneText = (TextView) ((Activity) mContext).findViewById(R.id.cm_none_text);
-        ListView mListView = (ListView) ((Activity) mContext).findViewById(R.id.cm_device_list);
-
-        if(getCount() == 0) {
-            mNoneText.setVisibility(View.VISIBLE);
-            mListView.setVisibility(View.INVISIBLE);
-        } else {
-            mNoneText.setVisibility(View.INVISIBLE);
-            mListView.setVisibility(View.VISIBLE);
         }
 
         TextView major = (TextView) convertView.findViewById(R.id.li_device_major);
@@ -90,7 +82,9 @@ public class DeviceListAdapter extends BaseAdapter {
         beaconList = list;
     }
 
-    public void addItem(Beacon b) {
-        beaconList.add(b);
+    public void initAll(Collection<Beacon> newBeacons) {
+        this.beaconList.clear();
+        this.beaconList.addAll(newBeacons);
+        this.notifyDataSetChanged();
     }
 }
