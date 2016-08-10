@@ -25,22 +25,16 @@ import java.util.Collection;
 /**
  * Created by Administrator on 2016-08-09.
  */
-public class ViewBeacons extends Fragment implements RangeNotifier, BeaconConsumer {
+public class ViewBeacons extends Fragment {
     private ListView mListView;
     private TextView mNoneText;
     private DeviceListAdapter mAdapter;
-    private BeaconManager mBeaconManager;
-
-    private final Region mRegion = new Region("Wearlovely", null, null, null);
 
     public ViewBeacons() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mBeaconManager = BeaconManager.getInstanceForApplication(getActivity());
-        mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         mAdapter = new DeviceListAdapter(getActivity());
     }
 
@@ -56,73 +50,18 @@ public class ViewBeacons extends Fragment implements RangeNotifier, BeaconConsum
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setAdapter(mAdapter);
-        mBeaconManager.bind(this);
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        /*if(mBeaconManager.isBound(this)){
-            mBeaconManager.setBackgroundMode(false);
-        }*/
-    }
+    public void refreshOnListView(Collection<Beacon> beacons) {
+        mAdapter.initAll(beacons);
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        /*if(mBeaconManager.isBound(this)){
-            mBeaconManager.setBackgroundMode(true);
-        }*/
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mBeaconManager.unbind(this);
-    }
-
-    @Override
-    public void onBeaconServiceConnect() {
-        try {
-            mBeaconManager.startRangingBeaconsInRegion(mRegion);
-        }catch(RemoteException e) {
-            e.printStackTrace();
+        if (mAdapter.getCount() == 0) {
+            mListView.setVisibility(View.GONE);
+            mNoneText.setVisibility(View.VISIBLE);
+        } else {
+            mListView.setVisibility(View.VISIBLE);
+            mNoneText.setVisibility(View.GONE);
         }
-
-        mBeaconManager.setRangeNotifier(this);
-    }
-
-    @Override
-    public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, Region region) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.initAll(beacons);
-
-                if(mAdapter.getCount() == 0) {
-                    mListView.setVisibility(View.GONE);
-                    mNoneText.setVisibility(View.VISIBLE);
-                } else {
-                    mListView.setVisibility(View.VISIBLE);
-                    mNoneText.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return getActivity().getApplicationContext();
-    }
-
-    @Override
-    public void unbindService(ServiceConnection serviceConnection) {
-        getActivity().unbindService(serviceConnection);
-    }
-
-    @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int mode) {
-        return getActivity().bindService(intent, serviceConnection, mode);
     }
 }
