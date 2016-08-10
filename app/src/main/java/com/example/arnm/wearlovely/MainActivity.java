@@ -1,9 +1,11 @@
 package com.example.arnm.wearlovely;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +16,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import java.util.Collection;
+
+public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
+    private BeaconManager mBeaconManager;
+    private Fragment mFragment;
+
+    private final Region mRegion = new Region("Wearlovely", null, null, null);
     public static final String TAG = "BeaconsEverywhere";
 
     @Override
@@ -35,10 +50,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_devices);
 
+        mBeaconManager = BeaconManager.getInstanceForApplication(this);
+        mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        mBeaconManager.bind(this);
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.cm_view_fragment, new ViewBeacons());
+        mFragment = new ViewBeacons();
+        ft.add(R.id.cm_view_fragment, mFragment);
         ft.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*if(mBeaconManager.isBound(this)){
+            mBeaconManager.setBackgroundMode(false);
+        }*/
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        /*if(mBeaconManager.isBound(this)){
+            mBeaconManager.setBackgroundMode(true);
+        }*/
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeaconManager.unbind(this);
     }
 
     @Override
@@ -100,5 +142,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick_cm_addDevice(View v) {
         Intent intent = new Intent(getApplicationContext(), AddDeviceActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        try {
+            mBeaconManager.startRangingBeaconsInRegion(mRegion);
+        }catch(RemoteException e) {
+            e.printStackTrace();
+        }
+
+        mBeaconManager.setRangeNotifier(this);
+    }
+
+    @Override
+    public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, Region region) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(mFragment.getClass() == ViewBeacons.class){
+                    ((ViewBeacons) mFragment).refreshOnListView(beacons);
+                }
+            }
+        });
     }
 }
