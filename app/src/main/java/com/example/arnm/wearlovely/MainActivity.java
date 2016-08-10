@@ -20,6 +20,7 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private BeaconManager mBeaconManager;
     private Fragment mFragment;
 
-    private final Region mRegion = new Region("Wearlovely", null, null, null);
+    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617e8096-bab7-43f3-bf96-3fd6f26d67b1"), null, null);
     public static final String TAG = "BeaconsEverywhere";
 
     @Override
