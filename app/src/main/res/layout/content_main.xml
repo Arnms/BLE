@@ -4,29 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.arnm.wearlovely.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cm_add_device_button"
-        android:text="기기 추가"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClick_cm_addDevice" />
-
-    <fragment
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/cm_view_fragment"
         android:layout_weight="1"
-        android:name="com.example.arnm.wearlovely.ViewBeacons"
-        android:layout_below="@+id/cm_add_device_button" />
+        android:fitsSystemWindows="false" />
 
 </RelativeLayout>

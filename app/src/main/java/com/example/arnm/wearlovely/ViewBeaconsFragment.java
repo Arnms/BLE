@@ -1,12 +1,7 @@
 package com.example.arnm.wearlovely;
 
-import android.app.Fragment;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,28 +9,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
 
 /**
  * Created by Administrator on 2016-08-09.
  */
-public class ViewBeacons extends Fragment {
+public class ViewBeaconsFragment extends Fragment {
     private ListView mListView;
     private TextView mNoneText;
-    private DeviceListAdapter mAdapter;
+    private BeaconListAdapter mAdapter;
 
-    public ViewBeacons() { }
+    public ViewBeaconsFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new DeviceListAdapter(getActivity());
+        mAdapter = new BeaconListAdapter(getActivity());
     }
 
     @Override

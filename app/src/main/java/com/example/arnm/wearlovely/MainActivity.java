@@ -1,8 +1,8 @@
 package com.example.arnm.wearlovely;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -28,10 +28,11 @@ import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
     private BeaconManager mBeaconManager;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
     private Fragment mFragment;
 
     private final Region mRegion = new Region("Wearlovely", Identifier.parse("617e8096-bab7-43f3-bf96-3fd6f26d67b1"), null, null);
-    public static final String TAG = "BeaconsEverywhere";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +56,13 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         mBeaconManager.bind(this);
 
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        mFragment = new ViewBeacons();
-        ft.add(R.id.cm_view_fragment, mFragment);
-        ft.commit();
+        if(savedInstanceState == null) {
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragment = new ViewBeaconsFragment();
+            mFragmentTransaction.add(R.id.cm_view_fragment, mFragment);
+            mFragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -122,9 +125,9 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         int id = item.getItemId();
 
         if (id == R.id.nav_devices) {
-            // Handle the camera action
+            mFragment = new ViewBeaconsFragment();
         } else if (id == R.id.nav_gallery) {
-
+            mFragment = new AddBeaconsFragment();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -135,14 +138,14 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             finish();
         }
 
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.cm_view_fragment, mFragment);
+        mFragmentTransaction.commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void onClick_cm_addDevice(View v) {
-        Intent intent = new Intent(getApplicationContext(), AddDeviceActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -161,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(mFragment.getClass() == ViewBeacons.class){
-                    ((ViewBeacons) mFragment).refreshOnListView(beacons);
+                if(mFragment.getClass() == ViewBeaconsFragment.class){
+                    ((ViewBeaconsFragment) mFragment).refreshOnListView(beacons);
                 }
             }
         });

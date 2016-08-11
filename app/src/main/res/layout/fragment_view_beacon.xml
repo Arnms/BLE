@@ -4,13 +4,22 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="비콘 목록"
+        android:textStyle="bold"
+        android:textColor="@color/pink_A200"
+        android:gravity="center"
+        android:padding="5dp" />
+
+    <TextView
         android:id="@+id/fvb_none_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@color/pink_900"
         android:text="저장된 기기가 없습니다."
-        android:layout_marginTop="5dp"
         android:visibility="gone" />
 
     <ListView
@@ -19,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:headerDividersEnabled="false" />
 
 </LinearLayout>
