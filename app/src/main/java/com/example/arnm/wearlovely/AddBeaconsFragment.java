@@ -1,6 +1,5 @@
 package com.example.arnm.wearlovely;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,62 +8,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Administrator on 2016-08-11.
  */
 public class AddBeaconsFragment extends Fragment {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-
+    private AddBeaconsAdapter mAdapter;
 
     public AddBeaconsFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_device, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_add_device, container, false);
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        initViewPager(view);
-    }
-
-    private void initViewPager(View view) {
         mViewPager = (ViewPager) view.findViewById(R.id.fad_viewpager);
         mTabLayout = (TabLayout) view.findViewById(R.id.fad_tablayout);
-
-        List<Fragment> mListFragment = new ArrayList<>();
-        mListFragment.add(new ABFirstFragment());
-        mListFragment.add(new ABSecondFragment());
-
-        AddBeaconsAdapter mAdapter = new AddBeaconsAdapter(getActivity().getSupportFragmentManager(), mListFragment);
-        mViewPager.setAdapter(mAdapter);
         mTabLayout.addTab(mTabLayout.newTab().setText("직접 등록"));
         mTabLayout.addTab(mTabLayout.newTab().setText("주변 비콘 등록"));
 
+        mAdapter = new AddBeaconsAdapter(getFragmentManager(), mTabLayout.getTabCount());
+        mViewPager.setAdapter(mAdapter);
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch(tab.getPosition()) {
-                    case 0:
-                        mViewPager.setCurrentItem(tab.getPosition());
-                        break;
-                    case 1:
-                        mViewPager.setCurrentItem(tab.getPosition());
-                        break;
-                    default: break;
-                }
+                super.onTabSelected(tab);
+                mViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+                super.onTabUnselected(tab);
+            }
         });
+
+        return view;
     }
 }
