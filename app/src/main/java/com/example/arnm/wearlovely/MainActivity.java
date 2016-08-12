@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private Fragment mFragment;
+    private int mPosition;
 
     private final Region mRegion = new Region("Wearlovely", Identifier.parse("617e8096-bab7-43f3-bf96-3fd6f26d67b1"), null, null);
 
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             mFragmentTransaction.add(R.id.cm_view_fragment, mFragment);
             mFragmentTransaction.commit();
         }
+
+        mPosition = R.id.cm_view_fragment;
     }
 
     @Override
@@ -114,7 +117,18 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if(id == R.id.action_add && id != mPosition) {
+            mPosition = id;
+            mFragment = new AddBeaconsFragment();
+        } else if(id == R.id.action_list && id != mPosition) {
+            mPosition = id;
+            mFragment = new ViewBeaconsFragment();
         }
+
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.cm_view_fragment, mFragment);
+        mFragmentTransaction.commit();
 
         return super.onOptionsItemSelected(item);
     }
@@ -123,15 +137,12 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        mPosition = id;
 
         if (id == R.id.nav_devices) {
             mFragment = new ViewBeaconsFragment();
         } else if (id == R.id.nav_gallery) {
             mFragment = new AddBeaconsFragment();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);

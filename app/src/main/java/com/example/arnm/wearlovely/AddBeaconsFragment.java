@@ -27,7 +27,7 @@ public class AddBeaconsFragment extends Fragment {
         mTabLayout.addTab(mTabLayout.newTab().setText("직접 등록"));
         mTabLayout.addTab(mTabLayout.newTab().setText("주변 비콘 등록"));
 
-        mAdapter = new AddBeaconsAdapter(getFragmentManager(), mTabLayout.getTabCount());
+        mAdapter = new AddBeaconsAdapter(getChildFragmentManager(), mTabLayout.getTabCount());
         mViewPager.setAdapter(mAdapter);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -36,6 +36,11 @@ public class AddBeaconsFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
                 mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                super.onTabReselected(tab);
             }
 
             @Override
