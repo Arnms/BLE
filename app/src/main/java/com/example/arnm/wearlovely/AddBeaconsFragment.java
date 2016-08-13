@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.altbeacon.beacon.Beacon;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by Administrator on 2016-08-11.
  */
@@ -22,12 +28,16 @@ public class AddBeaconsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_device, container, false);
 
+        List<Fragment> mList = new ArrayList<Fragment>();
+        mList.add(new ABFirstFragment());
+        mList.add(new ABSecondFragment());
+
         mViewPager = (ViewPager) view.findViewById(R.id.fad_viewpager);
         mTabLayout = (TabLayout) view.findViewById(R.id.fad_tablayout);
         mTabLayout.addTab(mTabLayout.newTab().setText("직접 등록"));
         mTabLayout.addTab(mTabLayout.newTab().setText("주변 비콘 등록"));
 
-        mAdapter = new AddBeaconsAdapter(getChildFragmentManager(), mTabLayout.getTabCount());
+        mAdapter = new AddBeaconsAdapter(getChildFragmentManager(), mList, mTabLayout.getTabCount());
         mViewPager.setAdapter(mAdapter);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -50,5 +60,13 @@ public class AddBeaconsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void refreshOnListView(Collection<Beacon> beacons) {
+        Fragment mFragment = mAdapter.getItem(mViewPager.getCurrentItem());
+
+        if(ABSecondFragment.class == mFragment.getClass()) {
+            ((ABSecondFragment) mFragment).refreshOnListView(beacons);
+        }
     }
 }
