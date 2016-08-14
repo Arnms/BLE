@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private Fragment mFragment;
     private int mPosition;
 
-    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617e8096-bab7-43f3-bf96-3fd6f26d67b1"), null, null);
+    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             public void run() {
                 if(mFragment.getClass() == ViewBeaconsFragment.class){
                     ((ViewBeaconsFragment) mFragment).refreshOnListView(beacons);
+                    Log.d("test", String.valueOf(beacons.size()));
                 } else if(mFragment.getClass() == AddBeaconsFragment.class){
                     ((AddBeaconsFragment) mFragment).refreshOnListView(beacons);
                 }

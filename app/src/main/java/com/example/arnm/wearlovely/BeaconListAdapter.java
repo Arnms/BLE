@@ -61,7 +61,8 @@ public class BeaconListAdapter extends BaseAdapter {
         if(beacon != null) {
             major.setText("Major : " + beacon.getId2().toString());
             minor.setText("Minor : " + beacon.getId3().toString());
-            distance.setText("거리 : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())));
+            distance.setText(beacon.getId1().toString());
+            //distance.setText("거리 : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())));
         }
 
         if(beacon.getRssi() >= -59) {
