@@ -3,6 +3,8 @@ package com.example.arnm.wearlovely;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +69,36 @@ public class AddBeaconsFragment extends Fragment {
 
         if(ABSecondFragment.class == mFragment.getClass()) {
             ((ABSecondFragment) mFragment).refreshOnListView(beacons);
+        }
+    }
+
+    private class AddBeaconsAdapter extends FragmentPagerAdapter {
+        private int numOfTabs;
+        private List<Fragment> mList;
+
+        public AddBeaconsAdapter(FragmentManager fm, List<Fragment> mList, int numOfTabs) {
+            super(fm);
+            this.numOfTabs = numOfTabs;
+            this.mList = mList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    ABFirstFragment tab1 = (ABFirstFragment) mList.get(position);
+                    return tab1;
+                case 1:
+                    ABSecondFragment tab2 = (ABSecondFragment) mList.get(position);
+                    return tab2;
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return numOfTabs;
         }
     }
 }

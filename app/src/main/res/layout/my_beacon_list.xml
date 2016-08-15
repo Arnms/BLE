@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <!--<ImageView
-        android:id="@+id/li_device_img"
-        android:layout_width="72dp"
-        android:layout_height="72dp" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,26 +11,26 @@
         android:divider="#999999"
         android:padding="10dp">
         <TextView
-            android:id="@+id/li_device_major"
+            android:id="@+id/mbl_device_major"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:text="Major" />
 
         <TextView
-            android:id="@+id/li_device_minor"
+            android:id="@+id/mbl_device_minor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Minor" />
 
         <TextView
-            android:id="@+id/li_device_distance"
+            android:id="@+id/mbl_device_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="거리" />
 
         <TextView
-            android:id="@+id/li_device_rssi"
+            android:id="@+id/mbl_device_rssi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="신호세기" />
