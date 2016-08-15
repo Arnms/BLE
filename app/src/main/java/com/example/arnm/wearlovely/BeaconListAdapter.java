@@ -19,20 +19,20 @@ import java.util.List;
 /**
  * Created by Administrator on 2016-07-15.
  */
-public class DeviceListAdapter extends BaseAdapter {
+public class BeaconListAdapter extends BaseAdapter {
     private Context mContext = null;
-    private List<Beacon> beaconList;
+    private List<Beacon> beaconList = new ArrayList<Beacon>();
     private static LayoutInflater inflater = null;
 
-    public DeviceListAdapter(Context mContext) {
+    public BeaconListAdapter(Context mContext) {
         this.mContext = mContext;
-        this.beaconList = new ArrayList<Beacon>();
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return beaconList.size();
+        if(beaconList.isEmpty()) return 0;
+        else return beaconList.size();
     }
 
     @Override
@@ -61,7 +61,8 @@ public class DeviceListAdapter extends BaseAdapter {
         if(beacon != null) {
             major.setText("Major : " + beacon.getId2().toString());
             minor.setText("Minor : " + beacon.getId3().toString());
-            distance.setText("거리 : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())));
+            distance.setText(beacon.getId1().toString());
+            //distance.setText("거리 : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())));
         }
 
         if(beacon.getRssi() >= -59) {

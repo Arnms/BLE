@@ -1,11 +1,12 @@
 package com.example.arnm.wearlovely;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,10 +29,12 @@ import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
     private BeaconManager mBeaconManager;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
     private Fragment mFragment;
+    private int mPosition;
 
-    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617e8096-bab7-43f3-bf96-3fd6f26d67b1"), null, null);
-    public static final String TAG = "BeaconsEverywhere";
+    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +58,15 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         mBeaconManager.bind(this);
 
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        mFragment = new ViewBeacons();
-        ft.add(R.id.cm_view_fragment, mFragment);
-        ft.commit();
+        if(savedInstanceState == null) {
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragment = new ViewBeaconsFragment();
+            mFragmentTransaction.add(R.id.cm_view_fragment, mFragment);
+            mFragmentTransaction.commit();
+        }
+
+        mPosition = R.id.cm_view_fragment;
     }
 
     @Override
@@ -111,7 +118,18 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if(id == R.id.action_add && id != mPosition) {
+            mPosition = id;
+            mFragment = new AddBeaconsFragment();
+        } else if(id == R.id.action_list && id != mPosition) {
+            mPosition = id;
+            mFragment = new ViewBeaconsFragment();
         }
+
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.cm_view_fragment, mFragment);
+        mFragmentTransaction.commit();
 
         return super.onOptionsItemSelected(item);
     }
@@ -120,29 +138,26 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        mPosition = id;
 
         if (id == R.id.nav_devices) {
-            // Handle the camera action
+            mFragment = new ViewBeaconsFragment();
         } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+            mFragment = new AddBeaconsFragment();
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         }
 
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.cm_view_fragment, mFragment);
+        mFragmentTransaction.commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void onClick_cm_addDevice(View v) {
-        Intent intent = new Intent(getApplicationContext(), AddDeviceActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -161,8 +176,11 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(mFragment.getClass() == ViewBeacons.class){
-                    ((ViewBeacons) mFragment).refreshOnListView(beacons);
+                if(mFragment.getClass() == ViewBeaconsFragment.class){
+                    ((ViewBeaconsFragment) mFragment).refreshOnListView(beacons);
+                    Log.d("test", String.valueOf(beacons.size()));
+                } else if(mFragment.getClass() == AddBeaconsFragment.class){
+                    ((AddBeaconsFragment) mFragment).refreshOnListView(beacons);
                 }
             }
         });

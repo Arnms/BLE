@@ -8,4 +8,5 @@
     <item name="ic_deivces_other" type="drawable">@drawable/ic_devices_other_black_24dp</item>
     <item name="ic_device" type="drawable">@drawable/ic_phone_android_black_48dp</item>
     <item name="ic_beacon" type="drawable">@drawable/ic_bluetooth_searching_black_48dp</item>
+    <item name="ic_beacon_add" type="drawable">@drawable/ic_add_circle_black_24dp</item>
 </resources>

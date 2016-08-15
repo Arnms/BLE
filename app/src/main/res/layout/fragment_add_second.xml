@@ -14,7 +14,7 @@
         android:padding="5dp" />
 
     <TextView
-        android:id="@+id/fvb_none_text"
+        android:id="@+id/fas_none_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -23,7 +23,7 @@
         android:visibility="gone" />
 
     <ListView
-        android:id="@+id/fvb_device_list"
+        android:id="@+id/fas_device_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
