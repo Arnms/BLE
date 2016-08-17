@@ -8,9 +8,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/pink_300"
-        android:src="@drawable/ic_sentiment_very_satisfied_white_48dp"
+        android:src="@drawable/ic_favorite_black_48dp"
         android:id="@+id/sbl_rssi_status_image"
+        android:tint="@color/pink_A200"
         android:alpha="1" />
 
     <TextView

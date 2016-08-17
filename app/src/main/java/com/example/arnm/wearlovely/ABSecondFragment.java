@@ -101,8 +101,7 @@ public class ABSecondFragment extends Fragment {
             if(beacon != null) {
                 major.setText("Major : " + beacon.getId2().toString());
                 minor.setText("Minor : " + beacon.getId3().toString());
-                distance.setText(beacon.getId1().toString());
-                //distance.setText("거리 : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())));
+                distance.setText(Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m");
             }
 
             if(beacon.getRssi() >= -59) {

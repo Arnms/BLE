@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             public void run() {
                 if(mFragment.getClass() == ViewBeaconsFragment.class){
                     ((ViewBeaconsFragment) mFragment).refreshOnListView(beacons);
-                    Log.d("test", String.valueOf(beacons.size()));
                 } else if(mFragment.getClass() == AddBeaconsFragment.class){
                     ((AddBeaconsFragment) mFragment).refreshOnListView(beacons);
                 }
