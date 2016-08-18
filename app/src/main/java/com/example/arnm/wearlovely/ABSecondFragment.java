@@ -99,20 +99,20 @@ public class ABSecondFragment extends Fragment {
             Beacon beacon = beaconList.get(index);
 
             if(beacon != null) {
-                major.setText("Major : " + beacon.getId2().toString());
-                minor.setText("Minor : " + beacon.getId3().toString());
+                major.setText(beacon.getId2().toString());
+                minor.setText(beacon.getId3().toString());
                 distance.setText(Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m");
             }
 
             if(beacon.getRssi() >= -59) {
                 //rssi.setTextColor(mContext.getResources().getColor(R.color.blue_900));
-                rssi.setText("신호 세기 : 강함");
+                rssi.setText("강함");
             } else if(beacon.getRssi() >= -70) {
                 //rssi.setTextColor(mContext.getResources().getColor(R.color.yellow_A700));
-                rssi.setText("신호 세기 : 보통");
+                rssi.setText("보통");
             } else {
                 //rssi.setTextColor(mContext.getResources().getColor(R.color.red_900));
-                rssi.setText("신호 세기 : 약함");
+                rssi.setText("약함");
             }
 
             return convertView;

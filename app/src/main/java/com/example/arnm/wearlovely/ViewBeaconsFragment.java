@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class ViewBeaconsFragment extends Fragment {
     private ListView mListView;
     private TextView mNoneText;
     private BeaconListAdapter mAdapter;
+    private List<MyBeacon> myBeaconList;
 
     public ViewBeaconsFragment() { }
 
@@ -30,6 +32,7 @@ public class ViewBeaconsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new BeaconListAdapter(getActivity());
+        myBeaconList = new ArrayList<>();
     }
 
     @Override
@@ -50,7 +53,7 @@ public class ViewBeaconsFragment extends Fragment {
     public void refreshOnListView(Collection<Beacon> beacons) {
         mAdapter.initAll(beacons);
 
-        if (mAdapter.getCount() == 0) {
+        if (myBeaconList.size() == 0) {
             mListView.setVisibility(View.GONE);
             mNoneText.setVisibility(View.VISIBLE);
         } else {
@@ -91,28 +94,24 @@ public class ViewBeaconsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.my_beacon_list, null);
             }
 
+            ImageView conState = (ImageView) convertView.findViewById(R.id.mbl_connect_state_image);
             TextView major = (TextView) convertView.findViewById(R.id.mbl_device_major);
             TextView minor = (TextView) convertView.findViewById(R.id.mbl_device_minor);
-            TextView distance = (TextView) convertView.findViewById(R.id.mbl_device_distance);
-            TextView rssi = (TextView) convertView.findViewById(R.id.mbl_device_rssi);
+            TextView connect = (TextView) convertView.findViewById(R.id.mbl_device_connect);
+            TextView alias = (TextView) convertView.findViewById(R.id.mbl_beacon_alias);
 
-            Beacon beacon = beaconList.get(index);
+            MyBeacon beacon = myBeaconList.get(index);
 
-            if(beacon != null) {
-                major.setText("Major : " + beacon.getId2().toString());
-                minor.setText("Minor : " + beacon.getId3().toString());
-                distance.setText(Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m");
-            }
+            major.setText(beacon.getMajor());
+            minor.setText(beacon.getMinor());
+            alias.setText(beacon.getAlias());
 
-            if(beacon.getRssi() >= -59) {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.blue_900));
-                rssi.setText("신호 세기 : 강함");
-            } else if(beacon.getRssi() >= -70) {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.yellow_A700));
-                rssi.setText("신호 세기 : 보통");
+            if(beacon.isEquals(beaconList)) {
+                conState.setAlpha(1.0f);
+                connect.setText("연결 됨");
             } else {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.red_900));
-                rssi.setText("신호 세기 : 약함");
+                conState.setAlpha(0f);
+                connect.setText("연결 끊김");
             }
 
             return convertView;
