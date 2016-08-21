@@ -1,5 +1,6 @@
 package com.example.arnm.wearlovely;
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -28,13 +30,16 @@ import org.altbeacon.beacon.Region;
 import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
+    private NavigationView navigationView;
+    private SettingDialog mSettingDialog;
+
     private BeaconManager mBeaconManager;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private Fragment mFragment;
     private int mPosition;
 
-    private final Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
+    private Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_devices);
+        navigationView.setCheckedItem(R.id.nav_beacon_list);
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
@@ -117,12 +122,14 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            settingDialogView();
         } else if(id == R.id.action_add && id != mPosition) {
             mPosition = id;
+            navigationView.setCheckedItem(R.id.nav_beacon_add);
             mFragment = new AddBeaconsFragment();
         } else if(id == R.id.action_list && id != mPosition) {
             mPosition = id;
+            navigationView.setCheckedItem(R.id.nav_beacon_list);
             mFragment = new ViewBeaconsFragment();
         }
 
@@ -140,10 +147,12 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         int id = item.getItemId();
         mPosition = id;
 
-        if (id == R.id.nav_devices) {
+        if (id == R.id.nav_beacon_list) {
             mFragment = new ViewBeaconsFragment();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_beacon_add) {
             mFragment = new AddBeaconsFragment();
+        } else if (id == R.id.nav_scanning_state) {
+
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
@@ -184,4 +193,46 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             }
         });
     }
+
+    public void settingDialogView() {
+        String maj, min;
+
+        if(mRegion.getId2() == null) {
+            maj = "";
+        } else {
+            maj = mRegion.getId2().toString();
+        }
+
+        if(mRegion.getId3() == null) {
+            min = "";
+        } else {
+            min = mRegion.getId3().toString();
+        }
+
+        mSettingDialog = new SettingDialog(this, "비콘 스캔 설정", maj, min, okListener);
+        mSettingDialog.show();
+    }
+
+    private View.OnClickListener okListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            /*Identifier major, minor;
+
+            if(mSettingDialog.getmMajor().isEmpty()) {
+                major = null;
+            } else {
+                major = Identifier.parse(mSettingDialog.getmMajor());
+            }
+
+            if(mSettingDialog.getmMinor().isEmpty()) {
+                minor = null;
+            } else {
+                minor = Identifier.parse(mSettingDialog.getmMinor());
+            }
+
+            mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), major, minor);
+*/
+            Toast.makeText(getApplicationContext(), "비콘 스캔 범위를 변경했습니다.", Toast.LENGTH_SHORT).show();
+            mSettingDialog.dismiss();
+        }
+    };
 }

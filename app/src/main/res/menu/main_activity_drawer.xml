@@ -3,15 +3,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_devices"
+            android:id="@+id/nav_beacon_list"
             android:checked="true"
             android:icon="@drawable/ic_list_black_24dp"
-            android:title="비콘 목록" />
+            android:title="내 비콘 목록" />
+
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_beacon_add"
             android:checked="false"
             android:icon="@drawable/ic_menu_gallery"
             android:title="비콘 추가" />
+
+        <item
+            android:id="@+id/nav_scanning_state"
+            android:checked="false"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="비콘 상태" />
     </group>
 
     <item
