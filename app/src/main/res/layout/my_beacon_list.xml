@@ -5,7 +5,8 @@
     android:orientation="horizontal"
     android:padding="10dp"
     android:gravity="center_vertical"
-    android:divider="@color/pink_200">
+    android:divider="@color/pink_200"
+    android:background="#ffffff">
 
     <ImageView
         android:layout_width="wrap_content"

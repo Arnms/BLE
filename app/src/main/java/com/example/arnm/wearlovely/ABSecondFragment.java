@@ -105,13 +105,13 @@ public class ABSecondFragment extends Fragment {
             }
 
             if(beacon.getRssi() >= -59) {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.blue_900));
+                rssi.setTextColor(mContext.getResources().getColor(R.color.blue_900));
                 rssi.setText("강함");
             } else if(beacon.getRssi() >= -70) {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.yellow_A700));
+                rssi.setTextColor(mContext.getResources().getColor(R.color.yellow_A700));
                 rssi.setText("보통");
             } else {
-                //rssi.setTextColor(mContext.getResources().getColor(R.color.red_900));
+                rssi.setTextColor(mContext.getResources().getColor(R.color.red_900));
                 rssi.setText("약함");
             }
 

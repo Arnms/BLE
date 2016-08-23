@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:textSize="24dp"
         android:text="비콘 목록"
         android:textStyle="bold"
@@ -29,6 +31,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"
         android:visibility="visible"
-        android:headerDividersEnabled="false" />
+        android:divider="@color/pink_50"
+        android:dividerHeight="1dp" />
 
 </LinearLayout>
