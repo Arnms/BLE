@@ -1,5 +1,6 @@
 package com.example.arnm.wearlovely;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,7 @@ import java.util.Collection;
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
     private SettingDialog mSettingDialog;
+    private BackPressCloseHandler mCloseHandler;
 
     private BeaconManager mBeaconManager;
     private FragmentManager mFragmentManager;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        mCloseHandler = new BackPressCloseHandler(this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            mCloseHandler.onBackPressed();
         }
     }
 
@@ -124,15 +128,17 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         if (id == R.id.action_settings) {
             settingDialogView();
         } else if(id == R.id.action_add && id != mPosition) {
-            mPosition = id;
             navigationView.setCheckedItem(R.id.nav_beacon_add);
             mFragment = new AddBeaconsFragment();
         } else if(id == R.id.action_list && id != mPosition) {
-            mPosition = id;
             navigationView.setCheckedItem(R.id.nav_beacon_list);
             mFragment = new ViewBeaconsFragment();
+        } else if(id == R.id.action_map && id != mPosition) {
+            navigationView.setCheckedItem(R.id.nav_beacon_list);
+            mFragment = new ViewLocationFragment();
         }
 
+        mPosition = id;
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.cm_view_fragment, mFragment);
@@ -152,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         } else if (id == R.id.nav_beacon_add) {
             mFragment = new AddBeaconsFragment();
         } else if (id == R.id.nav_scanning_state) {
-
+            mFragment = new ViewLocationFragment();
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
@@ -235,4 +241,25 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             mSettingDialog.dismiss();
         }
     };
+
+    public class BackPressCloseHandler {
+        private long backKeyPressedTime = 0;
+        private Activity activity;
+
+        public BackPressCloseHandler(Activity activity) {
+            this.activity = activity;
+        }
+
+        public void onBackPressed() {
+            if(System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                Toast.makeText(activity, "\'뒤로\'버튼을 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+                activity.finish();
+            }
+        }
+    }
 }

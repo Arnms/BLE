@@ -6,10 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.altbeacon.beacon.Beacon;
-
-import java.util.Collection;
-
 /**
  * Created by Administrator on 2016-08-11.
  */
