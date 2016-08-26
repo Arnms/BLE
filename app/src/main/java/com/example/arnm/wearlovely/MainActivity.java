@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         public void onBackPressed() {
             if(System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
-                Toast.makeText(activity, "\'뒤로\'버튼을 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "\'뒤로\' 버튼을 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
