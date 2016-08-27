@@ -4,7 +4,6 @@ package com.example.arnm.wearlovely;
  * Created by Arnm on 2016-08-26.
  */
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
@@ -23,17 +22,21 @@ import java.net.URL;
 
 public class SendPost implements Runnable {
     private JSONObject mObj;
-    private Handler handler;
+    private Handler mHandler;
+    private String mUrl;
+    private int mCode;
 
-    public SendPost(Handler handler, JSONObject mObj) {
-        this.handler = handler;
+    public SendPost(Handler mHandler, JSONObject mObj, String mUrl, int mCode) {
+        this.mHandler = mHandler;
         this.mObj = mObj;
+        this.mUrl = mUrl;
+        this.mCode = mCode;
     }
 
     @Override
     public void run() {
         try {
-            URL url = new URL("http://110.11.84.215:3000/users");
+            URL url = new URL(mUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setDefaultUseCaches(false);
@@ -57,8 +60,8 @@ public class SendPost implements Runnable {
             }
 
             JSONObject obj = new JSONObject(builder.toString());
-            Message msg = Message.obtain(handler, 0, obj);
-            handler.sendMessage(msg);
+            Message msg = Message.obtain(mHandler, mCode, obj);
+            mHandler.sendMessage(msg);
         } catch(MalformedURLException | ProtocolException exception) {
             exception.printStackTrace();
         } catch(IOException io){

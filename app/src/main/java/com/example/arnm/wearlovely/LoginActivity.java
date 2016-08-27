@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import java.io.Serializable;
 
 public class LoginActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
@@ -27,13 +30,10 @@ public class LoginActivity extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            try {
-                if (msg.what == 0) {
-                    JSONObject obj = (JSONObject) msg.obj;
-                    Log.d("test", obj.get("_id").toString());
-                }
-            } catch(JSONException e) {
-                e.printStackTrace();
+            if (msg.what == PostCode.REQUEST_SIGNIN_CODE) {
+                msgSignin(msg.obj);
+            } else if(msg.what == PostCode.REQUEST_LOGIN_CODE) {
+                msgLogin(msg.obj);
             }
         }
     };
@@ -62,12 +62,25 @@ public class LoginActivity extends AppCompatActivity {
         String useremail = ((LoginFragment) mFragment).getUseremail();
         String password = ((LoginFragment) mFragment).getPassword();
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        this.finish();
+        try {
+            String url = "http://192.168.0.13:3000/login";
+            JSONObject obj = new JSONObject();
+            obj.put("useremail", useremail);
+            obj.put("password", password);
+
+            SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_LOGIN_CODE);
+            Thread t = new Thread(sp);
+            t.start();
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClick_lg_signin(View v) {
+        toSigninFragment();
+    }
+
+    public void toSigninFragment() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -89,12 +102,13 @@ public class LoginActivity extends AppCompatActivity {
         String password = ((SigninFragment) mFragment).getPassword();
 
         try {
+            String url = "http://192.168.0.13:3000/users";
             JSONObject obj = new JSONObject();
             obj.put("username", username);
             obj.put("useremail", useremail);
             obj.put("password", password);
 
-            SendPost sp = new SendPost(handler, obj);
+            SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_SIGNIN_CODE);
             Thread t = new Thread(sp);
             t.start();
         } catch(JSONException e) {
@@ -103,6 +117,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick_signin_cancel(View v) {
+        toLoginFragment();
+    }
+
+    public void toLoginFragment() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -116,5 +134,46 @@ public class LoginActivity extends AppCompatActivity {
                 mSigninButtons.setVisibility(View.GONE);
             }
         });
+    }
+
+    public void msgSignin(Object obj) {
+        try {
+            JSONObject jsonObject = (JSONObject) obj;
+            int result = (int) jsonObject.get("result");
+
+            if (result == 0) {
+                Toast.makeText(LoginActivity.this, "회원가입 되었습니다.", Toast.LENGTH_LONG);
+                toLoginFragment();
+            } else if (result == 1) {
+                Toast.makeText(LoginActivity.this, "회원가입 과정에 오류가 발생했습니다.", Toast.LENGTH_LONG);
+            }
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void msgLogin(Object obj) {
+        try {
+            JSONObject jsonObject = (JSONObject) obj;
+            int result = (int) jsonObject.get("result");
+            MyUser user = new MyUser().toJSONParse(((JSONObject) obj).getJSONObject("user"));
+
+            if (result == 0) {
+                if(user == null) {
+                    Toast.makeText(LoginActivity.this, "로그인에 실패했습니다.", Toast.LENGTH_LONG);
+                } else {
+                    Toast.makeText(LoginActivity.this, "로그인에 성공했습니다.", Toast.LENGTH_LONG);
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                    this.finish();
+                }
+            } else if (result == 1) {
+                Toast.makeText(LoginActivity.this, "로그인 과정에 오류가 발생했습니다.", Toast.LENGTH_LONG);
+            }
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

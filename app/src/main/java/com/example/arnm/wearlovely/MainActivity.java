@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private int mPosition;
 
     private Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
+    private MyUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        mUser = (MyUser) getIntent().getExtras().getSerializable("user");
 
         mCloseHandler = new BackPressCloseHandler(this);
 
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
-            finish();
+            this.finish();
         }
 
         mFragmentManager = getSupportFragmentManager();
