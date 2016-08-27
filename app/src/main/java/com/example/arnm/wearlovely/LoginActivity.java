@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LinearLayout mLoginButtons;
     private LinearLayout mSigninButtons;
+    private TextView mLoginTitle;
 
     private Handler handler = new Handler() {
         @Override
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginButtons = (LinearLayout) findViewById(R.id.login_buttons);
         mSigninButtons = (LinearLayout) findViewById(R.id.signin_buttons);
+        mLoginTitle = (TextView) findViewById(R.id.login_title);
 
         if(savedInstanceState == null) {
             mFragmentManager = getSupportFragmentManager();
@@ -92,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 mLoginButtons.setVisibility(View.GONE);
                 mSigninButtons.setVisibility(View.VISIBLE);
+                mLoginTitle.setText("회원가입");
             }
         });
     }
@@ -132,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 mLoginButtons.setVisibility(View.VISIBLE);
                 mSigninButtons.setVisibility(View.GONE);
+                mLoginTitle.setText("로그인");
             }
         });
     }
@@ -142,10 +147,10 @@ public class LoginActivity extends AppCompatActivity {
             int result = (int) jsonObject.get("result");
 
             if (result == 0) {
-                Toast.makeText(LoginActivity.this, "회원가입 되었습니다.", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "회원가입 되었습니다.", Toast.LENGTH_SHORT).show();
                 toLoginFragment();
             } else if (result == 1) {
-                Toast.makeText(LoginActivity.this, "회원가입 과정에 오류가 발생했습니다.", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "회원가입 과정에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         } catch(JSONException e) {
             e.printStackTrace();
@@ -156,13 +161,13 @@ public class LoginActivity extends AppCompatActivity {
         try {
             JSONObject jsonObject = (JSONObject) obj;
             int result = (int) jsonObject.get("result");
-            MyUser user = new MyUser().toJSONParse(((JSONObject) obj).getJSONObject("user"));
 
             if (result == 0) {
-                if(user == null) {
-                    Toast.makeText(LoginActivity.this, "로그인에 실패했습니다.", Toast.LENGTH_LONG);
+                if(((JSONObject) obj).isNull("user")) {
+                    Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "로그인에 성공했습니다.", Toast.LENGTH_LONG);
+                    MyUser user = new MyUser().toJSONParse(((JSONObject) obj).getJSONObject("user"));
+                    Toast.makeText(getApplicationContext(), "로그인에 성공했습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("user", user);
@@ -170,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                     this.finish();
                 }
             } else if (result == 1) {
-                Toast.makeText(LoginActivity.this, "로그인 과정에 오류가 발생했습니다.", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "로그인 과정에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         } catch(JSONException e) {
             e.printStackTrace();

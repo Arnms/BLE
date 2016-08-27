@@ -12,6 +12,18 @@
     android:gravity="center"
     android:background="#ffffff">
 
+    <TextView
+        android:id="@+id/login_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="24dp"
+        android:text="로그인"
+        android:textStyle="bold"
+        android:textColor="@color/pink_A200"
+        android:gravity="center"
+        android:padding="5dp" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

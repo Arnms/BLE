@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         } else if (id == R.id.nav_scanning_state) {
             mFragment = new ViewLocationFragment();
         } else if (id == R.id.nav_logout) {
+            Toast.makeText(getApplicationContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             this.finish();
