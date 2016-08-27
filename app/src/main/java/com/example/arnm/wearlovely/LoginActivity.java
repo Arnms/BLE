@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,12 +25,17 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout mSigninButtons;
 
     private Handler handler = new Handler() {
-      @Override
-      public void handleMessage(Message msg) {
-          if(msg.what == 0) {
-              Toast.makeText(LoginActivity.this, msg.arg1, Toast.LENGTH_SHORT).show();
-          }
-      }
+        @Override
+        public void handleMessage(Message msg) {
+            try {
+                if (msg.what == 0) {
+                    JSONObject obj = (JSONObject) msg.obj;
+                    Log.d("test", obj.get("_id").toString());
+                }
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
     };
 
     @Override
@@ -88,8 +94,9 @@ public class LoginActivity extends AppCompatActivity {
             obj.put("useremail", useremail);
             obj.put("password", password);
 
-            SendPost sp = new SendPost(handler);
-            sp.execute(obj);
+            SendPost sp = new SendPost(handler, obj);
+            Thread t = new Thread(sp);
+            t.start();
         } catch(JSONException e) {
             e.printStackTrace();
         }

@@ -21,17 +21,19 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class SendPost extends AsyncTask<JSONObject, Void, Void> {
+public class SendPost implements Runnable {
+    private JSONObject mObj;
     private Handler handler;
 
-    public SendPost(Handler handler) {
+    public SendPost(Handler handler, JSONObject mObj) {
         this.handler = handler;
+        this.mObj = mObj;
     }
 
     @Override
-    protected Void doInBackground(JSONObject... params) {
+    public void run() {
         try {
-            URL url = new URL("http://192.168.78.1:3000/users");
+            URL url = new URL("http://110.11.84.215:3000/users");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setDefaultUseCaches(false);
@@ -42,7 +44,7 @@ public class SendPost extends AsyncTask<JSONObject, Void, Void> {
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
             PrintWriter writer = new PrintWriter(outputStreamWriter);
-            writer.write(params[0].toString());
+            writer.write(mObj.toString());
             writer.flush();
 
             InputStreamReader reader = new InputStreamReader(conn.getInputStream(), "UTF-8");
@@ -55,7 +57,7 @@ public class SendPost extends AsyncTask<JSONObject, Void, Void> {
             }
 
             JSONObject obj = new JSONObject(builder.toString());
-            Message msg = Message.obtain(handler, 0, params[0]);
+            Message msg = Message.obtain(handler, 0, obj);
             handler.sendMessage(msg);
         } catch(MalformedURLException | ProtocolException exception) {
             exception.printStackTrace();
@@ -64,7 +66,5 @@ public class SendPost extends AsyncTask<JSONObject, Void, Void> {
         } catch(JSONException e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 }
