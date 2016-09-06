@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,6 +45,8 @@ public class ABSecondFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Adapter Setting
         mListView.setAdapter(mAdapter);
         setHasOptionsMenu(true);
     }
@@ -63,6 +67,7 @@ public class ABSecondFragment extends Fragment {
         private Context mContext = null;
         private List<Beacon> beaconList = new ArrayList<Beacon>();
         private LayoutInflater inflater = null;
+        private BeaconDialog mBeaconDialog;
 
         public BeaconListAdapter(Context mContext) {
             this.mContext = mContext;
@@ -96,7 +101,7 @@ public class ABSecondFragment extends Fragment {
             TextView distance = (TextView) convertView.findViewById(R.id.sbl_device_distance);
             TextView rssi = (TextView) convertView.findViewById(R.id.sbl_device_rssi);
 
-            Beacon beacon = beaconList.get(index);
+            final Beacon beacon = beaconList.get(index);
 
             if(beacon != null) {
                 major.setText(beacon.getId2().toString());
@@ -114,6 +119,26 @@ public class ABSecondFragment extends Fragment {
                 rssi.setTextColor(mContext.getResources().getColor(R.color.red_900));
                 rssi.setText("약함");
             }
+
+            LinearLayout info = (LinearLayout) convertView.findViewById(R.id.sbl_beacon_info);
+            info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.INFO_DIALOG_OPEN, beacon);
+                    dialog.setTitle("비콘 정보 확인");
+                    dialog.show();
+                }
+            });
+
+            ImageButton addBtn = (ImageButton) convertView.findViewById(R.id.sbl_add_button);
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.ADD_DIALOG_OPEN, beacon);
+                    dialog.setTitle("비콘 정보 등록");
+                    dialog.show();
+                }
+            });
 
             return convertView;
         }

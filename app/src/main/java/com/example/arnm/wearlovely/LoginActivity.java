@@ -62,7 +62,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick_lg_login(View v) {
-        String useremail = ((LoginFragment) mFragment).getUseremail();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        this.finish();
+        /*String useremail = ((LoginFragment) mFragment).getUseremail();
         String password = ((LoginFragment) mFragment).getPassword();
 
         try {
@@ -76,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             t.start();
         } catch(JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void onClick_lg_signin(View v) {

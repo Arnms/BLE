@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Arnm on 2016-08-27.
@@ -14,6 +15,7 @@ public class MyUser implements Serializable {
     private String username;
     private String useremail;
     private String password;
+    private ArrayList<String> beacons;
 
     public MyUser() { }
 
@@ -54,6 +56,14 @@ public class MyUser implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<String> getBeacons() {
+        return beacons;
+    }
+
+    public void setBeacons(ArrayList<String> beacons) {
+        this.beacons = beacons;
     }
 
     public MyUser toJSONParse(JSONObject obj) {

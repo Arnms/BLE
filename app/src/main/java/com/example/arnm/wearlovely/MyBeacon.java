@@ -2,13 +2,14 @@ package com.example.arnm.wearlovely;
 
 import org.altbeacon.beacon.Beacon;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016-08-18.
  */
-public class MyBeacon {
+public class MyBeacon implements Serializable {
     private String _id;
     private String uuid;
     private String major;

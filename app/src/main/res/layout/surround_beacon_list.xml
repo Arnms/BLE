@@ -13,85 +13,93 @@
         android:src="@drawable/ic_add_circle_black_48dp"
         android:layout_marginRight="24dp"
         android:paddingLeft="8dp"
-        android:id="@+id/sbl_rssi_state_image"
+        android:id="@+id/sbl_add_button"
         android:tint="@color/pink_A200"
         android:background="#ffffff" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginEnd="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MAJOR" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MINOR" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginEnd="16dp">
-
-        <TextView
-            android:id="@+id/sbl_device_major"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00000" />
-
-        <TextView
-            android:id="@+id/sbl_device_minor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00000" />
-
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/sbl_beacon_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="right"
-        android:paddingRight="16dp">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/sbl_device_distance"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0m"
-            android:textSize="32dp"
-            android:textStyle="bold"
-            android:textColor="@color/pink_300" />
+            android:orientation="vertical"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAJOR" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MINOR" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:id="@+id/sbl_device_major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00000" />
+
+            <TextView
+                android:id="@+id/sbl_device_minor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00000" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="right">
+            android:orientation="vertical"
+            android:gravity="right"
+            android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/sbl_device_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="신호상태"
-                android:textSize="12dp"
-                android:layout_marginRight="5dp"/>
+                android:text="0m"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:textColor="@color/pink_300" />
 
-            <TextView
-                android:id="@+id/sbl_device_rssi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="강함"
-                android:textSize="12dp"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="right">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="신호상태"
+                    android:textSize="12dp"
+                    android:layout_marginRight="5dp"/>
+
+                <TextView
+                    android:id="@+id/sbl_device_rssi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="강함"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

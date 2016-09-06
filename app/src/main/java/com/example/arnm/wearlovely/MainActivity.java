@@ -32,7 +32,6 @@ import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
-    private SettingDialog mSettingDialog;
     private BackPressCloseHandler mCloseHandler;
 
     private BeaconManager mBeaconManager;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mUser = (MyUser) getIntent().getExtras().getSerializable("user");
+        //mUser = (MyUser) getIntent().getExtras().getSerializable("user");
 
         mCloseHandler = new BackPressCloseHandler(this);
 
@@ -128,9 +127,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            settingDialogView();
-        } else if(id == R.id.action_add && id != mPosition) {
+         if(id == R.id.action_add && id != mPosition) {
             navigationView.setCheckedItem(R.id.nav_beacon_add);
             mFragment = new AddBeaconsFragment();
         } else if(id == R.id.action_list && id != mPosition) {
@@ -203,48 +200,6 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
             }
         });
     }
-
-    public void settingDialogView() {
-        String maj, min;
-
-        if(mRegion.getId2() == null) {
-            maj = "";
-        } else {
-            maj = mRegion.getId2().toString();
-        }
-
-        if(mRegion.getId3() == null) {
-            min = "";
-        } else {
-            min = mRegion.getId3().toString();
-        }
-
-        mSettingDialog = new SettingDialog(this, "비콘 스캔 설정", maj, min, okListener);
-        mSettingDialog.show();
-    }
-
-    private View.OnClickListener okListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            /*Identifier major, minor;
-
-            if(mSettingDialog.getmMajor().isEmpty()) {
-                major = null;
-            } else {
-                major = Identifier.parse(mSettingDialog.getmMajor());
-            }
-
-            if(mSettingDialog.getmMinor().isEmpty()) {
-                minor = null;
-            } else {
-                minor = Identifier.parse(mSettingDialog.getmMinor());
-            }
-
-            mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), major, minor);
-*/
-            Toast.makeText(getApplicationContext(), "비콘 스캔 범위를 변경했습니다.", Toast.LENGTH_SHORT).show();
-            mSettingDialog.dismiss();
-        }
-    };
 
     public class BackPressCloseHandler {
         private long backKeyPressedTime = 0;

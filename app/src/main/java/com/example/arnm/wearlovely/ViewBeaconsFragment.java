@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -100,7 +102,7 @@ public class ViewBeaconsFragment extends Fragment {
             TextView connect = (TextView) convertView.findViewById(R.id.mbl_device_connect);
             TextView alias = (TextView) convertView.findViewById(R.id.mbl_beacon_alias);
 
-            MyBeacon beacon = myBeaconList.get(index);
+            final MyBeacon beacon = myBeaconList.get(index);
 
             major.setText(beacon.getMajor());
             minor.setText(beacon.getMinor());
@@ -113,6 +115,26 @@ public class ViewBeaconsFragment extends Fragment {
                 conState.setAlpha(0f);
                 connect.setText("연결 끊김");
             }
+
+            LinearLayout info = (LinearLayout) convertView.findViewById(R.id.mbl_beacon_info);
+            info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.EDIT_DIALOG_OPEN, beacon);
+                    dialog.setTitle("비콘 정보 변경");
+                    dialog.show();
+                }
+            });
+
+            ImageButton delBtn = (ImageButton) convertView.findViewById(R.id.mbl_del_button);
+            delBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.DEL_DIALOG_OPEN, beacon);
+                    dialog.setTitle("비콘 정보 삭제");
+                    dialog.show();
+                }
+            });
 
             return convertView;
         }
