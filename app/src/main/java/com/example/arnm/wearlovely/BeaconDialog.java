@@ -41,6 +41,8 @@ public class BeaconDialog extends Dialog {
         public void handleMessage(Message msg) {
             if (msg.what == PostCode.REQUEST_ADD_BEACON_CODE) {
                 Toast.makeText(getContext(), "비콘을 등록했습니다.", Toast.LENGTH_SHORT);
+            } else if(msg.what == PostCode.REQUEST_EDIT_BEACON_CODE) {
+                Toast.makeText(getContext(), "비콘을 변경했습니다.", Toast.LENGTH_SHORT);
             }
         }
     };
@@ -77,7 +79,7 @@ public class BeaconDialog extends Dialog {
         mViewMajor.setText(beacon.getId2().toString());
         mViewMinor.setText(beacon.getId3().toString());
 
-        if(isAdd != ADD_DIALOG_OPEN) {
+        if(isAdd != ADD_DIALOG_OPEN && isAdd != INFO_DIALOG_OPEN) {
             mViewAlias.setText(myBeacon.getAlias());
         }
 
@@ -101,7 +103,6 @@ public class BeaconDialog extends Dialog {
                         obj.put("major", beacon.getId2().toString());
                         obj.put("minor", beacon.getId3().toString());
                         obj.put("alias", mViewAlias.getText().toString());
-                        obj.put("bluetoothAddress", beacon.getBluetoothAddress());
 
                         SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_ADD_BEACON_CODE);
                         Thread t = new Thread(sp);
@@ -117,7 +118,6 @@ public class BeaconDialog extends Dialog {
                         obj.put("major", beacon.getId2().toString());
                         obj.put("minor", beacon.getId3().toString());
                         obj.put("alias", mViewAlias.getText().toString());
-                        obj.put("bluetoothAddress", beacon.getBluetoothAddress());
 
                         SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_ADD_BEACON_CODE);
                         Thread t = new Thread(sp);

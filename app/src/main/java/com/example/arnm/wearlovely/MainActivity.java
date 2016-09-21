@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        //mUser = (MyUser) getIntent().getExtras().getSerializable("user");
+        mUser = (MyUser) getIntent().getExtras().getSerializable("user");
 
         mCloseHandler = new BackPressCloseHandler(this);
 
@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        mBeaconManager.setForegroundScanPeriod(500);
+        mBeaconManager.setForegroundBetweenScanPeriod(300);
+        mBeaconManager.setBackgroundScanPeriod(500);
+        mBeaconManager.setBackgroundBetweenScanPeriod(300);
         mBeaconManager.bind(this);
 
         if(savedInstanceState == null) {
@@ -83,17 +87,17 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     @Override
     public void onResume() {
         super.onResume();
-        /*if(mBeaconManager.isBound(this)){
+        if(mBeaconManager.isBound(this)){
             mBeaconManager.setBackgroundMode(false);
-        }*/
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        /*if(mBeaconManager.isBound(this)){
+        if(mBeaconManager.isBound(this)){
             mBeaconManager.setBackgroundMode(true);
-        }*/
+        }
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ViewBeaconsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new BeaconListAdapter(getActivity());
+        mAdapter = new BeaconListAdapter(getActivity().getApplicationContext());
         myBeaconList = new ArrayList<>();
     }
 
@@ -96,17 +96,15 @@ public class ViewBeaconsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.my_beacon_list, null);
             }
 
-            ImageView conState = (ImageView) convertView.findViewById(R.id.mbl_connect_state_image);
+            ImageView conState = (ImageView) convertView.findViewById(R.id.mbl_del_button);
             TextView major = (TextView) convertView.findViewById(R.id.mbl_device_major);
             TextView minor = (TextView) convertView.findViewById(R.id.mbl_device_minor);
-            TextView connect = (TextView) convertView.findViewById(R.id.mbl_device_connect);
-            TextView alias = (TextView) convertView.findViewById(R.id.mbl_beacon_alias);
+            TextView connect = (TextView) convertView.findViewById(R.id.mbl_device_rssi);
 
             final MyBeacon beacon = myBeaconList.get(index);
 
             major.setText(beacon.getMajor());
             minor.setText(beacon.getMinor());
-            alias.setText(beacon.getAlias());
 
             if(beacon.isEquals(beaconList)) {
                 conState.setAlpha(1.0f);
