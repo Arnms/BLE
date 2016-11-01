@@ -15,7 +15,7 @@ public class MyUser implements Serializable {
     private String username;
     private String useremail;
     private String password;
-    private ArrayList<String> beacons;
+    private ArrayList<MyBeacon> beacons;
 
     public MyUser() { }
 
@@ -58,11 +58,11 @@ public class MyUser implements Serializable {
         this.password = password;
     }
 
-    public ArrayList<String> getBeacons() {
+    public ArrayList<MyBeacon> getBeacons() {
         return beacons;
     }
 
-    public void setBeacons(ArrayList<String> beacons) {
+    public void setBeacons(ArrayList<MyBeacon> beacons) {
         this.beacons = beacons;
     }
 

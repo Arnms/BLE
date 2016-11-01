@@ -17,6 +17,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/faf_uuid"
         android:text="617e8096-bab7-43f3-bf96-3fd6f26d67b1"
         android:textSize="16dp"
         android:focusableInTouchMode="false"

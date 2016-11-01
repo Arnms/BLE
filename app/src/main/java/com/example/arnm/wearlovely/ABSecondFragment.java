@@ -67,7 +67,7 @@ public class ABSecondFragment extends Fragment {
         private Context mContext = null;
         private List<Beacon> beaconList = new ArrayList<Beacon>();
         private LayoutInflater inflater = null;
-        private BeaconDialog mBeaconDialog;
+        private BeaconAddDialog mBeaconAddDialog;
 
         public BeaconListAdapter(Context mContext) {
             this.mContext = mContext;
@@ -124,7 +124,7 @@ public class ABSecondFragment extends Fragment {
             info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.INFO_DIALOG_OPEN, beacon);
+                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.INFO_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 확인");
                     dialog.show();
                 }
@@ -134,7 +134,7 @@ public class ABSecondFragment extends Fragment {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.ADD_DIALOG_OPEN, beacon);
+                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.ADD_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 등록");
                     dialog.show();
                 }

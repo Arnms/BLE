@@ -28,7 +28,10 @@ import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements RangeNotifier, BeaconConsumer, NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -196,10 +199,19 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                ArrayList<Beacon> sortedBeacons = new ArrayList<Beacon>(beacons);
+                Collections.sort(sortedBeacons, new Comparator<Beacon>() {
+
+                    @Override
+                    public int compare(Beacon beacon0, Beacon beacon1) {
+                        return new Double(beacon0.getDistance()).compareTo(new Double(beacon1.getDistance()));
+                    }
+                });
+
                 if(mFragment.getClass() == ViewBeaconsFragment.class){
-                    ((ViewBeaconsFragment) mFragment).refreshOnListView(beacons);
+                    ((ViewBeaconsFragment) mFragment).refreshOnListView(sortedBeacons);
                 } else if(mFragment.getClass() == AddBeaconsFragment.class){
-                    ((AddBeaconsFragment) mFragment).refreshOnListView(beacons);
+                    ((AddBeaconsFragment) mFragment).refreshOnListView(sortedBeacons);
                 }
             }
         });

@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -96,29 +94,20 @@ public class ViewBeaconsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.my_beacon_list, null);
             }
 
-            ImageView conState = (ImageView) convertView.findViewById(R.id.mbl_del_button);
-            TextView major = (TextView) convertView.findViewById(R.id.mbl_device_major);
-            TextView minor = (TextView) convertView.findViewById(R.id.mbl_device_minor);
-            TextView connect = (TextView) convertView.findViewById(R.id.mbl_device_rssi);
+            TextView alias = (TextView) convertView.findViewById(R.id.mbl_device_alias);
+            TextView majmin = (TextView) convertView.findViewById(R.id.mbl_device_majmin);
+            TextView distance = (TextView) convertView.findViewById(R.id.mbl_device_distance);
 
             final MyBeacon beacon = myBeaconList.get(index);
 
-            major.setText(beacon.getMajor());
-            minor.setText(beacon.getMinor());
+            alias.setText(beacon.getAlias());
+            majmin.setText("(" + beacon.getMajor() + ", " + beacon.getMinor() + ")");
+            distance.setText(String.valueOf(beaconList.get(index).getDistance()) + "m");
 
-            if(beacon.isEquals(beaconList)) {
-                conState.setAlpha(1.0f);
-                connect.setText("연결 됨");
-            } else {
-                conState.setAlpha(0f);
-                connect.setText("연결 끊김");
-            }
-
-            LinearLayout info = (LinearLayout) convertView.findViewById(R.id.mbl_beacon_info);
-            info.setOnClickListener(new View.OnClickListener() {
+            convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.EDIT_DIALOG_OPEN, beacon);
+                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.EDIT_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 변경");
                     dialog.show();
                 }
@@ -128,7 +117,7 @@ public class ViewBeaconsFragment extends Fragment {
             delBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconDialog dialog = new BeaconDialog(mContext, BeaconDialog.DEL_DIALOG_OPEN, beacon);
+                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.DEL_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 삭제");
                     dialog.show();
                 }

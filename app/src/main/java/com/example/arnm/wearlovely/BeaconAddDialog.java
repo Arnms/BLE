@@ -20,7 +20,7 @@ import org.json.JSONObject;
  * Created by Arnm on 2016-08-27.
  */
 
-public class BeaconDialog extends Dialog {
+public class BeaconAddDialog extends Dialog {
     public static int ADD_DIALOG_OPEN = 100;
     public static int EDIT_DIALOG_OPEN = 200;
     public static int INFO_DIALOG_OPEN = 300;
@@ -40,20 +40,18 @@ public class BeaconDialog extends Dialog {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == PostCode.REQUEST_ADD_BEACON_CODE) {
-                Toast.makeText(getContext(), "비콘을 등록했습니다.", Toast.LENGTH_SHORT);
-            } else if(msg.what == PostCode.REQUEST_EDIT_BEACON_CODE) {
-                Toast.makeText(getContext(), "비콘을 변경했습니다.", Toast.LENGTH_SHORT);
+                Toast.makeText(getContext().getApplicationContext(), "비콘을 등록했습니다.", Toast.LENGTH_SHORT);
             }
         }
     };
 
-    public BeaconDialog(Context mContext, int isAdd, Beacon beacon) {
+    public BeaconAddDialog(Context mContext, int isAdd, Beacon beacon) {
         super(mContext);
         this.isAdd = isAdd;
         this.beacon = beacon;
     }
 
-    public BeaconDialog(Context mContext, int isAdd, MyBeacon myBeacon) {
+    public BeaconAddDialog(Context mContext, int isAdd, MyBeacon myBeacon) {
         super(mContext);
         this.isAdd = isAdd;
         this.myBeacon = myBeacon;
@@ -97,22 +95,7 @@ public class BeaconDialog extends Dialog {
             public void onClick(View view) {
                 if(isAdd == ADD_DIALOG_OPEN) {
                     try {
-                        String url = "http://192.168.0.13:3000/beacon/add";
-                        JSONObject obj = new JSONObject();
-                        obj.put("uuid", beacon.getId1().toString());
-                        obj.put("major", beacon.getId2().toString());
-                        obj.put("minor", beacon.getId3().toString());
-                        obj.put("alias", mViewAlias.getText().toString());
-
-                        SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_ADD_BEACON_CODE);
-                        Thread t = new Thread(sp);
-                        t.start();
-                    } catch(JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else if(isAdd == EDIT_DIALOG_OPEN) {
-                    try {
-                        String url = "http://192.168.0.13:3000/beacon/edit";
+                        String url = "http://192.168.209.155:3000/beacon/add";
                         JSONObject obj = new JSONObject();
                         obj.put("uuid", beacon.getId1().toString());
                         obj.put("major", beacon.getId2().toString());
@@ -127,14 +110,14 @@ public class BeaconDialog extends Dialog {
                     }
                 }
 
-                BeaconDialog.super.dismiss();
+                BeaconAddDialog.super.dismiss();
             }
         });
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BeaconDialog.super.cancel();
+                BeaconAddDialog.super.cancel();
             }
         });
     }

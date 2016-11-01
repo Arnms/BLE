@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비콘 정보"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="9dp">
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="Major"
+            android:textColor="@color/pink_A200"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/ibd_view_major"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:hint="별명은 필수입니다."
+            android:singleLine="true" />
+    </TableRow>
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="9dp">
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="Minor"
+            android:textColor="@color/pink_A200"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/ibd_view_minor"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:hint="별명은 필수입니다."
+            android:singleLine="true" />
+    </TableRow>
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="Alias"
+            android:textColor="@color/pink_A200"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/ibd_view_alias"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:hint="별명은 필수입니다."
+            android:singleLine="true" />
+    </TableRow>
+
+    <TableRow
+        android:gravity="center"
+        android:id="@+id/ibd_button_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="18dp">
+
+        <Button
+            android:id="@+id/del_ok"
+            android:layout_width="78dp"
+            android:layout_height="36dp"
+            android:text="확인"
+            android:background="@color/pink_200"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/del_cancel"
+            android:layout_width="78dp"
+            android:layout_height="36dp"
+            android:text="취소"
+            android:background="@color/pink_200"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="12dp" />
+    </TableRow>
+
+</LinearLayout>
