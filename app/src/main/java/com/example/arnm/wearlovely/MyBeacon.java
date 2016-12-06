@@ -19,6 +19,8 @@ public class MyBeacon implements Serializable {
     private String minor;
     private String alias;
 
+    public MyBeacon() {}
+
     public MyBeacon(String _id, String uuid, String major, String minor, String alias) {
         this._id = _id;
         this.uuid = uuid;

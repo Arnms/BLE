@@ -55,9 +55,22 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == PostCode.REQUEST_BEACON_LIST) {
-                JSONObject arr = ((JSONObject) msg.obj);
-                mUser.setBeacons((ArrayList) msg.obj);
+            try {
+                if (msg.what == PostCode.REQUEST_BEACON_LIST) {
+                    JSONArray arr = ((JSONArray) msg.obj);
+                    ArrayList<MyBeacon> list = new ArrayList<>();
+
+                    for(int i=0; i<arr.length(); i++) {
+                        JSONObject obj = arr.getJSONObject(i);
+                        MyBeacon mb = new MyBeacon();
+                        mb.toJSONParse(obj);
+                        list.add(mb);
+                    }
+
+                    mUser.setBeacons(list);
+                }
+            } catch(JSONException e) {
+
             }
         }
     };
