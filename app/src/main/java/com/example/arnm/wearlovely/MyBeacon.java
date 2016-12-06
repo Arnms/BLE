@@ -1,6 +1,9 @@
 package com.example.arnm.wearlovely;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.Identifier;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,8 +18,14 @@ public class MyBeacon implements Serializable {
     private String major;
     private String minor;
     private String alias;
-    private String bluetoothAddress;
-    private Date lasttime;
+
+    public MyBeacon(String _id, String uuid, String major, String minor, String alias) {
+        this._id = _id;
+        this.uuid = uuid;
+        this.major = major;
+        this.minor = minor;
+        this.alias = alias;
+    }
 
     public String get_id() { return _id; }
 
@@ -55,24 +64,16 @@ public class MyBeacon implements Serializable {
     }
 
     public boolean isEquals(Beacon beacon) {
-        if(this.uuid.equals(beacon.getId1()) && this.major.equals(beacon.getId2()) && this.minor.equals(beacon.getId3())) {
+        if(Identifier.parse(uuid).equals(beacon.getId1()) && Identifier.parse(major).equals(beacon.getId2()) && Identifier.parse(minor).equals(beacon.getId3())) {
             return true;
         } else {
             return false;
         }
     }
 
-    public String getBluetoothAddress() { return bluetoothAddress; }
-
-    public void setBluetoothAddress(String bluetoothAddress) { this.bluetoothAddress = bluetoothAddress; }
-
-    public Date getLasttime() { return lasttime; }
-
-    public void setLasttime(Date lasttime) { this.lasttime = lasttime; }
-
     public boolean isEquals(List<Beacon> beacons) {
         for(Beacon b : beacons) {
-            if(this.uuid.equals(b.getId1()) && this.major.equals(b.getId2()) && this.minor.equals(b.getId3())) {
+            if(Identifier.parse(uuid).equals(b.getId1()) && Identifier.parse(major).equals(b.getId2()) && Identifier.parse(minor).equals(b.getId3())) {
                 return true;
             }
         }
@@ -80,20 +81,15 @@ public class MyBeacon implements Serializable {
         return false;
     }
 
-    public String getLastAccessTime() {
-        long currentTime = System.currentTimeMillis();
-        Date d = new Date(currentTime - lasttime.getTime());
+    public MyBeacon toJSONParse(JSONObject obj) {
+        MyBeacon beacon = null;
 
-        if(d.getSeconds() <= 5) {
-            return "5초 이하";
-        } else if(d.getMinutes() < 1) {
-            return String.valueOf(d.getSeconds()) + "초 전";
-        } else if(d.getHours() < 1) {
-            return String.valueOf(d.getMinutes()) + "분 전";
-        } else if(d.getDay() < 1) {
-            return String.valueOf(d.getHours()) + "시간 전";
-        } else {
-            return String.valueOf(d.getTime() / 1000 / 60 / 60 / 24) + "일 전";
+        try {
+            beacon = new MyBeacon(obj.getString("_id"), obj.getString("uuid"), obj.getString("major"), obj.getString("minor"), obj.getString("alias"));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        return beacon;
     }
 }

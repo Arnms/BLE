@@ -21,6 +21,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class SendPost implements Runnable {
+    private static String url = "http://kumoh.info:3000";
     private JSONObject mObj;
     private Handler mHandler;
     private String mUrl;
@@ -29,7 +30,7 @@ public class SendPost implements Runnable {
     public SendPost(Handler mHandler, JSONObject mObj, String mUrl, int mCode) {
         this.mHandler = mHandler;
         this.mObj = mObj;
-        this.mUrl = mUrl;
+        this.mUrl = url + mUrl;
         this.mCode = mCode;
     }
 

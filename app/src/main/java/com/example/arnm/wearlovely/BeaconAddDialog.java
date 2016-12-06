@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +31,13 @@ public class BeaconAddDialog extends Dialog {
     private Beacon beacon;
     private MyBeacon myBeacon;
 
+    private TextView mTitle;
     private TextView mViewMajor;
     private TextView mViewMinor;
     private EditText mViewAlias;
     private Button mButtonOK;
     private Button mButtonCancel;
+    private TableRow mAliasTable;
 
     private Handler handler = new Handler() {
         @Override
@@ -68,22 +71,20 @@ public class BeaconAddDialog extends Dialog {
 
         setContentView(R.layout.add_button_dialog);
 
+        mTitle = (TextView) findViewById(R.id.abd_title) ;
         mViewMajor = (TextView) findViewById(R.id.abd_view_major);
         mViewMinor = (TextView) findViewById(R.id.abd_view_minor);
         mViewAlias = (EditText) findViewById(R.id.abd_view_alias);
         mButtonOK = (Button) findViewById(R.id.add_ok);
         mButtonCancel = (Button) findViewById(R.id.add_cancel);
+        mAliasTable = (TableRow) findViewById(R.id.abd_alias_table);
 
         mViewMajor.setText(beacon.getId2().toString());
         mViewMinor.setText(beacon.getId3().toString());
 
-        if(isAdd != ADD_DIALOG_OPEN && isAdd != INFO_DIALOG_OPEN) {
-            mViewAlias.setText(myBeacon.getAlias());
-        }
-
-        if(isAdd == DEL_DIALOG_OPEN) {
-            mViewAlias.setFocusable(false);
-            mViewAlias.setClickable(false);
+        if(isAdd == INFO_DIALOG_OPEN) {
+            mTitle.setText("비콘 정보");
+            mAliasTable.setVisibility(View.GONE);
         }
 
         setButtonListener();
@@ -95,7 +96,7 @@ public class BeaconAddDialog extends Dialog {
             public void onClick(View view) {
                 if(isAdd == ADD_DIALOG_OPEN) {
                     try {
-                        String url = "http://192.168.209.155:3000/beacon/add";
+                        String url = "/beacon/add";
                         JSONObject obj = new JSONObject();
                         obj.put("uuid", beacon.getId1().toString());
                         obj.put("major", beacon.getId2().toString());

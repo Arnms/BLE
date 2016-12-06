@@ -103,7 +103,7 @@ public class BeaconInfoDialog extends Dialog {
             public void onClick(View view) {
                 if(isInfo == DEL_DIALOG_OPEN) {
                     try {
-                        String url = "http://192.168.209.155:3000/beacon/del";
+                        String url = "/beacon/del";
                         JSONObject obj = new JSONObject();
                         obj.put("_id", myBeacon.get_id());
 
@@ -115,7 +115,7 @@ public class BeaconInfoDialog extends Dialog {
                     }
                 } else if(isInfo == EDIT_DIALOG_OPEN) {
                     try {
-                        String url = "http://192.168.209.155:3000/beacon/edit";
+                        String url = "/beacon/edit";
                         JSONObject obj = new JSONObject();
                         obj.put("uuid", beacon.getId1().toString());
                         obj.put("major", beacon.getId2().toString());

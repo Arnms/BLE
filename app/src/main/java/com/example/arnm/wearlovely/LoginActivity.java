@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = ((LoginFragment) mFragment).getPassword();
 
         try {
-            String url = "http://192.168.209.155:3000/login";
+            String url = "/login";
             JSONObject obj = new JSONObject();
             obj.put("useremail", useremail);
             obj.put("password", password);
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = ((SigninFragment) mFragment).getPassword();
 
         try {
-            String url = "http://192.168.209.155:3000/users";
+            String url = "/users";
             JSONObject obj = new JSONObject();
             obj.put("username", username);
             obj.put("useremail", useremail);

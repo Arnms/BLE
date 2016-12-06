@@ -2,6 +2,8 @@ package com.example.arnm.wearlovely;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +29,9 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,8 +48,19 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
     private Fragment mFragment;
     private int mPosition;
 
-    private Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
+    private Region mRegion = new Region("Wearlovely", Identifier.parse("50CF90B0-0C8F-11E4-9191-0800200C9A66"), null, null);
+    //private Region mRegion = new Region("Wearlovely", Identifier.parse("617E8096-BAB7-43F3-BF96-3FD6F26D67B1"), null, null);
     private MyUser mUser;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == PostCode.REQUEST_BEACON_LIST) {
+                JSONObject arr = ((JSONObject) msg.obj);
+                mUser.setBeacons((ArrayList) msg.obj);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         toggle.syncState();
 
         mUser = (MyUser) getIntent().getExtras().getSerializable("user");
+        mUser.setBeacons(new ArrayList<MyBeacon>());
 
         mCloseHandler = new BackPressCloseHandler(this);
 
@@ -71,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         mBeaconManager.setForegroundScanPeriod(500);
-        mBeaconManager.setForegroundBetweenScanPeriod(300);
+        mBeaconManager.setForegroundBetweenScanPeriod(500);
         mBeaconManager.setBackgroundScanPeriod(500);
-        mBeaconManager.setBackgroundBetweenScanPeriod(300);
+        mBeaconManager.setBackgroundBetweenScanPeriod(500);
         mBeaconManager.bind(this);
 
         if(savedInstanceState == null) {
@@ -199,6 +216,18 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    String url = "/user/blist";
+                    JSONObject obj = new JSONObject();
+                    obj.put("uuid", mUser.get_id().toString());
+
+                    SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_BEACON_LIST);
+                    Thread t = new Thread(sp);
+                    t.start();
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
                 ArrayList<Beacon> sortedBeacons = new ArrayList<Beacon>(beacons);
                 Collections.sort(sortedBeacons, new Comparator<Beacon>() {
 
@@ -208,8 +237,8 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
                     }
                 });
 
-                if(mFragment.getClass() == ViewBeaconsFragment.class){
-                    ((ViewBeaconsFragment) mFragment).refreshOnListView(sortedBeacons);
+                if(mFragment.getClass() == ViewBeaconsFragment.class) {
+                    ((ViewBeaconsFragment) mFragment).refreshOnListView(sortedBeacons, mUser.getBeacons());
                 } else if(mFragment.getClass() == AddBeaconsFragment.class){
                     ((AddBeaconsFragment) mFragment).refreshOnListView(sortedBeacons);
                 }

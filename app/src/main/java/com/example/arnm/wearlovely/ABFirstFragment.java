@@ -29,6 +29,10 @@ public class ABFirstFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == PostCode.REQUEST_ADD_BEACON_CODE) {
+                fafMajor.setText("");
+                fafMinor.setText("");
+                fafAlias.setText("");
+
                 Toast.makeText(getActivity().getApplicationContext(), "비콘을 등록했습니다.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -50,7 +54,7 @@ public class ABFirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    String url = "http://192.168.0.13:3000/beacon/add";
+                    String url = "/beacon/add";
                     JSONObject obj = new JSONObject();
                     obj.put("uuid", fafUuid.getText());
                     obj.put("major", fafMajor.getText());

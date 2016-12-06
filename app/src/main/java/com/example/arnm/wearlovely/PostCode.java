@@ -11,4 +11,5 @@ public class PostCode {
     public static int REQUEST_EDIT_BEACON_CODE = 101;
     public static int REQUEST_DEL_BEACON_CODE = 102;
     public static int REQUEST_INFO_BEACON_CODE = 103;
+    public static int REQUEST_BEACON_LIST = 200;
 }

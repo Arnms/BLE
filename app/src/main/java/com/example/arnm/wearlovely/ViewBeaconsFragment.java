@@ -3,6 +3,7 @@ package com.example.arnm.wearlovely;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +27,7 @@ public class ViewBeaconsFragment extends Fragment {
     private ListView mListView;
     private TextView mNoneText;
     private BeaconListAdapter mAdapter;
-    private List<MyBeacon> myBeaconList;
+
 
     public ViewBeaconsFragment() { }
 
@@ -32,7 +35,6 @@ public class ViewBeaconsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new BeaconListAdapter(getActivity().getApplicationContext());
-        myBeaconList = new ArrayList<>();
     }
 
     @Override
@@ -50,10 +52,10 @@ public class ViewBeaconsFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    public void refreshOnListView(Collection<Beacon> beacons) {
-        mAdapter.initAll(beacons);
+    public void refreshOnListView(Collection<Beacon> beacons, ArrayList<MyBeacon> myBeacons) {
+        mAdapter.initAll(beacons, myBeacons);
 
-        if (myBeaconList.size() == 0) {
+        if (myBeacons.size() == 0) {
             mListView.setVisibility(View.GONE);
             mNoneText.setVisibility(View.VISIBLE);
         } else {
@@ -65,6 +67,7 @@ public class ViewBeaconsFragment extends Fragment {
     private class BeaconListAdapter extends BaseAdapter {
         private Context mContext = null;
         private List<Beacon> beaconList = new ArrayList<Beacon>();
+        private List<MyBeacon> myBeaconList = new ArrayList<>();
         private LayoutInflater inflater = null;
 
         public BeaconListAdapter(Context mContext) {
@@ -74,13 +77,13 @@ public class ViewBeaconsFragment extends Fragment {
 
         @Override
         public int getCount() {
-            if(beaconList.isEmpty()) return 0;
-            else return beaconList.size();
+            if(myBeaconList.isEmpty()) return 0;
+            else return myBeaconList.size();
         }
 
         @Override
         public Object getItem(int index) {
-            return beaconList.get(index);
+            return myBeaconList.get(index);
         }
 
         @Override
@@ -92,6 +95,7 @@ public class ViewBeaconsFragment extends Fragment {
         public View getView(int index, View convertView, ViewGroup parent) {
             if(convertView == null) {
                 convertView = inflater.inflate(R.layout.my_beacon_list, null);
+
             }
 
             TextView alias = (TextView) convertView.findViewById(R.id.mbl_device_alias);
@@ -99,10 +103,19 @@ public class ViewBeaconsFragment extends Fragment {
             TextView distance = (TextView) convertView.findViewById(R.id.mbl_device_distance);
 
             final MyBeacon beacon = myBeaconList.get(index);
+            Beacon b = null;
+            for(Beacon bb : beaconList) {
+                if(beacon.isEquals(bb)) {
+                    b = bb;
+                }
+            }
 
             alias.setText(beacon.getAlias());
             majmin.setText("(" + beacon.getMajor() + ", " + beacon.getMinor() + ")");
-            distance.setText(String.valueOf(beaconList.get(index).getDistance()) + "m");
+            if(b != null) distance.setText(Double.parseDouble(String.format("%.3f", b.getDistance())) + "m");
+            else {
+                distance.setText("신호 없음");
+            }
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,7 +143,9 @@ public class ViewBeaconsFragment extends Fragment {
             beaconList = list;
         }
 
-        public void initAll(Collection<Beacon> newBeacons) {
+        public void initAll(Collection<Beacon> newBeacons, ArrayList<MyBeacon> myBeacons) {
+            this.myBeaconList.clear();
+            this.myBeaconList.addAll(myBeacons);
             this.beaconList.clear();
             this.beaconList.addAll(newBeacons);
             this.notifyDataSetChanged();
