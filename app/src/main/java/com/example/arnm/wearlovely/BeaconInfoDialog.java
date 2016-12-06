@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -71,12 +72,13 @@ public class BeaconInfoDialog extends Dialog {
         mViewMajor = (EditText) findViewById(R.id.ibd_view_major);
         mViewMinor = (EditText) findViewById(R.id.ibd_view_minor);
         mViewAlias = (EditText) findViewById(R.id.ibd_view_alias);
-        mButtonOK = (Button) findViewById(R.id.add_ok);
-        mButtonCancel = (Button) findViewById(R.id.add_cancel);
+        mButtonOK = (Button) findViewById(R.id.del_ok);
+        mButtonCancel = (Button) findViewById(R.id.del_cancel);
         mButtonTable = (TableRow) findViewById(R.id.ibd_button_table);
 
-        mViewMajor.setText(beacon.getId2().toString());
-        mViewMinor.setText(beacon.getId3().toString());
+        mViewMajor.setText(myBeacon.getMajor().toString());
+        mViewMinor.setText(myBeacon.getMinor().toString());
+        mViewAlias.setText(myBeacon.getAlias().toString());
 
         if(isInfo == DEL_DIALOG_OPEN) {
             mViewMajor.setFocusable(false);
@@ -117,12 +119,12 @@ public class BeaconInfoDialog extends Dialog {
                     try {
                         String url = "/beacon/edit";
                         JSONObject obj = new JSONObject();
-                        obj.put("uuid", beacon.getId1().toString());
-                        obj.put("major", beacon.getId2().toString());
-                        obj.put("minor", beacon.getId3().toString());
+                        obj.put("uuid", myBeacon.getUuid().toString());
+                        obj.put("major", myBeacon.getMajor().toString());
+                        obj.put("minor", myBeacon.getMinor().toString());
                         obj.put("alias", mViewAlias.getText().toString());
 
-                        SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_ADD_BEACON_CODE);
+                        SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_EDIT_BEACON_CODE);
                         Thread t = new Thread(sp);
                         t.start();
                     } catch(JSONException e) {

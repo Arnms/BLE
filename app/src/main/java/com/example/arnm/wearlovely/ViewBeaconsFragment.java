@@ -99,7 +99,6 @@ public class ViewBeaconsFragment extends Fragment {
             }
 
             TextView alias = (TextView) convertView.findViewById(R.id.mbl_device_alias);
-            TextView majmin = (TextView) convertView.findViewById(R.id.mbl_device_majmin);
             TextView distance = (TextView) convertView.findViewById(R.id.mbl_device_distance);
 
             final MyBeacon beacon = myBeaconList.get(index);
@@ -111,7 +110,6 @@ public class ViewBeaconsFragment extends Fragment {
             }
 
             alias.setText(beacon.getAlias());
-            majmin.setText("(" + beacon.getMajor() + ", " + beacon.getMinor() + ")");
             if(b != null) distance.setText(Double.parseDouble(String.format("%.3f", b.getDistance())) + "m");
             else {
                 distance.setText("신호 없음");
@@ -120,7 +118,7 @@ public class ViewBeaconsFragment extends Fragment {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.EDIT_DIALOG_OPEN, beacon);
+                    BeaconInfoDialog dialog = new BeaconInfoDialog(getActivity(), BeaconAddDialog.EDIT_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 변경");
                     dialog.show();
                 }
@@ -130,7 +128,7 @@ public class ViewBeaconsFragment extends Fragment {
             delBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BeaconAddDialog dialog = new BeaconAddDialog(mContext, BeaconAddDialog.DEL_DIALOG_OPEN, beacon);
+                    BeaconInfoDialog dialog = new BeaconInfoDialog(getActivity(), BeaconAddDialog.DEL_DIALOG_OPEN, beacon);
                     dialog.setTitle("비콘 정보 삭제");
                     dialog.show();
                 }

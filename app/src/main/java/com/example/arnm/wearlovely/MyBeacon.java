@@ -1,5 +1,7 @@
 package com.example.arnm.wearlovely;
 
+import android.util.Log;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.json.JSONException;

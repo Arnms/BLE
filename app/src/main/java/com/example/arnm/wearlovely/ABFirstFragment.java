@@ -61,7 +61,7 @@ public class ABFirstFragment extends Fragment {
                     obj.put("minor", fafMinor.getText());
                     obj.put("alias", fafAlias.getText());
 
-                    SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_SIGNIN_CODE);
+                    SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_ADD_BEACON_CODE);
                     Thread t = new Thread(sp);
                     t.start();
                 } catch(JSONException e) {
