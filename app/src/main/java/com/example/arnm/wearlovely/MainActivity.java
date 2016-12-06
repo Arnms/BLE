@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements RangeNotifier, Be
                 try {
                     String url = "/user/blist";
                     JSONObject obj = new JSONObject();
-                    obj.put("uuid", mUser.get_id().toString());
+                    obj.put("_id", mUser.get_id().toString());
 
                     SendPost sp = new SendPost(handler, obj, url, PostCode.REQUEST_BEACON_LIST);
                     Thread t = new Thread(sp);
